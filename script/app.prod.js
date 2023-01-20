@@ -47,6 +47,20 @@ Vue
 
     methods: {
 
+      async updateRoom() {
+        const res = await helper.post( 'https://serega-test.store/api/rooms/update', {
+          refresh_token: localStorage.getItem( 'refresh_token' ),
+          access_token: localStorage.getItem( 'access_token' ),
+          password: this.current.room.password,
+          recording: this.current.recording,
+        });
+
+        if( res && res.error ) {
+          this.message( res.error.message, res.error.code )
+          return
+        }
+      },
+
       async message( messages, code ) {
         this.error.messages = await []
         this.error.color = await 'green'
@@ -478,6 +492,7 @@ Vue
       });
 
       this.channelRoom.bind('room-event', ( data ) => {
+        this.current.windows = this.current.windows.filter( el => el !== 'messages' )
         this.rooms = data.message
       });
 

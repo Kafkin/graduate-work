@@ -13,6 +13,7 @@ export default {
     messageText: null,
     searchRoom: null,
     sendStop: false,
+    recording: null,
     search: null,
     filter: null,
     color: null,

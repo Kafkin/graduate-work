@@ -114,3 +114,10 @@ a{
 span.active{
   color: var(--font-color-active);
 }
+
+.span__container{
+  display: flex; align-items: baseline; gap: 20px;
+  position: absolute; bottom: 0; right: 0;
+  width: max-content; height: max-content;
+  margin: 20px;
+}

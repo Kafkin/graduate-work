@@ -479,13 +479,17 @@
             <button class="form-btn form_create-messages-btn" type="submit" :disabled="!isActiveNewMessageBtn">send</button>
           </span>
         </form>
-
+        
         <form action="#" class="form form_post form_create-messages_share" @submit.prevent="!current.sendStop && createMessage()" v-if="activeRoom && roomType">
           <span class="form-span form_post-span form_create-messages_share-span">
             <textarea placeholder="enter yout code" class="form-input form_post-input form_create-messages_share-input" :disabled="current.user.user_name !== current.room.recording" v-model="messageTextarea"></textarea>
           </span>
         </form>
-
+        
+        <span class="span__container" v-if="activeRoom && roomType && current.user.user_id === current.room.author.id">
+          <input type="text" placeholder="enter name" class="form-input form-input_parb" v-model="current.recording">
+          <button class="form-btn form-btn_parb" @click="updateRoom">recording</button>
+        </span>
       </div>
     </template>
   </v-cmd>
