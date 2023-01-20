@@ -1,0 +1,112 @@
+.cmd__messages{
+  width: 690px;
+}
+
+.cmd-title_messages{
+  width: 100%;
+}
+
+.cmd-body_messages{
+  display: flex; align-items: flex-end; 
+  flex-direction: column; gap: 0px;
+  width: 100%; height: 370px;
+  position: relative;
+}
+
+/* form join */
+.form_messages{
+  position: absolute; top: 50%; left: 50%;
+  transform: translate( -51%, -50% );
+}
+
+/* message */
+.container-messages{
+  width: 100%; height: auto;
+  display: flex; align-items: flex-start;
+  flex-direction: column; gap: 7px;
+  scrollbar-width: none;
+  overflow-y: scroll;
+  padding: 20px 20px;
+}
+
+.container-messages::-webkit-scrollbar{
+  background: transparent;
+  width: 1px;
+}
+
+.message{
+  /* background: var(--font-color-double); */
+  width: 100%; height: max-content;
+  position: relative;
+  padding: 7px 13px;
+
+  word-wrap: break-word;
+}
+
+.message.your{
+  color: var(--font-color);
+}
+
+.message-span{
+  position: absolute; bottom: -6px; right: 0px;
+  font-size: 12px;
+}
+
+/* form create message */
+.form_create-messages{
+  position: relative;
+  margin-top: auto;
+}
+
+.form_create-messages-span{
+  border-top: 3px dashed var(--font-color);
+}
+
+.form_create-messages-input{
+  font-size: 18px !important;
+  padding: 9px 17px !important;
+}
+
+.form_create-messages-btn{
+  text-shadow: 0px 0px 13px var(--font-color-active);
+  color: var(--font-color-active) !important;
+  background: var(--background-color);
+  width: max-content; height: 100%;
+  padding: 0px 20px !important;
+  font-size: 16px !important;
+  border: none !important;
+}
+
+
+/* form create message SHARE */
+.form_create-messages_share{
+  width: 100%; height: 100% !important;
+  position: relative;
+  /* margin-top: auto; */
+}
+
+.form_create-messages_share-span{
+  width: 100%; height: 100% !important;
+  /* border-top: 3px dashed var(--font-color); */
+}
+
+.form_create-messages_share-input{
+  width: 100%; height: 100% !important;
+  padding: 9px 17px !important;
+  font-size: 18px !important;
+  background: transparent;
+  text-align: start;
+  outline: none;
+  border: none;
+  resize: none;
+}
+
+.form_create-messages_share-btn{
+  text-shadow: 0px 0px 13px var(--font-color-active);
+  color: var(--font-color-active) !important;
+  background: var(--background-color);
+  width: max-content; height: 100%;
+  padding: 0px 20px !important;
+  font-size: 16px !important;
+  border: none !important;
+}

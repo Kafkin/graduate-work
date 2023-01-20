@@ -1,0 +1,12 @@
+.error{
+  transform: translateY( calc( var(--top) * -30px ) );
+  position: fixed; bottom: 0; right: 0;
+  padding: 7px 13px;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.error_message{
+  color: var(--error-color);
+  font-size: 18px;
+}

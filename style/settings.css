@@ -1,0 +1,47 @@
+.cmd__settings{
+  width: 690px;
+}
+
+.cmd-title_settings{
+  width: 100% !important;
+}
+
+.cmd-body_settings{
+  display: flex; align-items: flex-start; justify-content: center;
+  flex-direction: column; gap: 11px;
+  width: 100%; height: max-content;
+  padding: 25px 40px;
+}
+
+.settings-title{
+  line-height: 1;
+  color: var(--font-color);
+  font-size: 22px;
+}
+
+.settings-title:nth-child(3){
+  margin-top: 25px;
+}
+
+.settings-span{
+  width: 100%; height: max-content;
+  display: flex; align-items: flex-start;
+  flex-wrap: wrap; gap: 10px;
+}
+
+.settings-btn{
+  border: 3px dashed var(--font-color);
+  color: var(--font-color);
+  padding: 9px 18px;
+  font-size: 14px;
+}
+
+.settings-btn:hover{
+  background: var(--font-color-double);
+}
+
+.settings-btn.active{
+  border-color: var(--font-color-active);
+  background: transparent !important;
+  color: var(--font-color-active);
+}

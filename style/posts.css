@@ -1,0 +1,462 @@
+.cmd__post{
+  width: 1400px;
+}
+
+.cmd-title_post{
+  width: 100% !important;
+}
+
+.cmd-body_post{
+  display: flex; align-items: center;
+  height: 600px;
+}
+
+.container-settings{
+  /* border: 3px solid var(--font-color); */
+  display: flex; align-items: flex-start;
+  flex-direction: column; gap: 30px;
+  width: 430px; height: 100%;
+  position: relative;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding: 10px 30px;
+
+  scrollbar-width: none;
+}
+
+.container-settings::-webkit-scrollbar{
+  background: transparent;
+  width: 1px;
+}
+
+.container-filter{
+  display: flex; align-items: flex-start;
+  flex-direction: column; gap: 5px;
+  width: 100%; height: max-content;
+}
+
+.container-filter__title{
+  font-size: 32px;
+}
+
+.container-filter__item{
+  width: 100%; height: max-content;
+  padding: 0px 20px;
+  font-size: 16px;
+}
+
+.container-filter__item:hover{
+  background: var(--font-color-double);
+}
+
+.container-filter__item.active{
+  background: var(--font-color-active);
+  color: var(--background-color);
+}
+
+.container-filter__subscribe{
+  color: var(--font-color);
+  margin-top: -10px;
+  font-size: 16px;
+  opacity: 60%;
+}
+
+.container-tegs{
+  display: flex; align-items: flex-start;
+  flex-direction: column; gap: 5px;
+  width: 100%; height: max-content;
+}
+
+.container-tegs__title{
+  font-size: 32px;
+}
+
+.container-tegs__span{
+  display: flex; align-items: flex-start;
+  width: 100%; height: 300px;
+  align-content: flex-start;
+  flex-wrap: wrap; gap: 5px;
+  scrollbar-width: none;
+  overflow-y: scroll;
+}
+
+.container-tegs__span::-webkit-scrollbar{
+  background: transparent;
+  width: 1px;
+}
+
+.container-tegs__item{
+  border: 1px solid var(--font-color-double);
+  padding: 4px 7px;
+  font-size: 16px;
+}
+
+.container-tegs__item:hover{
+  background: var(--font-color-double);
+}
+
+.container-tegs__item.active{
+  background: var(--font-color-active);
+  color: var(--background-color);
+}
+
+/* form create post */
+.container-create-post{
+  display: flex; align-items: flex-start;
+  flex-direction: column; gap: 5px;
+  width: 100%; height: max-content;
+}
+
+.container-create-post__span{
+  display: flex; align-items: flex-start;
+  width: 100%; height: max-content;
+  align-content: flex-start;
+  flex-wrap: wrap; gap: 5px;
+  scrollbar-width: none;
+  overflow-y: scroll;
+}
+
+.container-create-post__span::-webkit-scrollbar{
+  background: transparent;
+  width: 1px;
+}
+
+.form_create_post{
+  width: 80% !important;
+}
+
+.form_create_post label{
+  font-size: 14px;
+}
+
+.form_create_post input{
+  font-size: 14px;
+  padding: 6px 11px;
+}
+
+.form_create_post > button{
+  font-size: 14px;
+  padding: 6px 11px;
+}
+
+.form_create_post .circle{
+  width: 10px !important; height: 10px !important;
+}
+
+.form_create_post .inner{
+  width: 7px !important; height: 7px !important;
+}
+
+.form-description{
+  font-size: var(--font-color);
+  margin: -20px 0 -10px 0;
+  font-size: 14px;
+  opacity: 50%;
+}
+
+
+/* posts */
+.container-posts{
+  display: flex; align-items: flex-start;
+  flex-wrap: wrap; gap: 20px;
+  align-content: flex-start;
+  width: 100%; height: 100%;
+  position: relative;
+  overflow-y: scroll;
+  padding: 20px 20px;
+}
+
+.container-posts::-webkit-scrollbar-track{
+  background: transparent;
+}
+
+.container-posts::-webkit-scrollbar-thumb{
+  background: var(--font-color);
+  opacity: 90%;
+}
+
+.post{
+  transform: translateY( 5px );
+  opacity: 0;
+
+  border: 3px dashed var(--font-color);
+  border-color: transparent;
+
+  display: flex; align-items: center;
+  width: 100%; height: 200px;
+  transition: 0.25s ease-in;
+  position: relative;
+  padding-left: 30px;
+}
+
+.post.active{
+  transform: translateY( 0px );
+  opacity: 1;
+}
+
+.post:hover{
+  border: 3px dashed var(--font-color);
+}
+
+.post-info{
+  width: 150px; height: max-content;
+  /* border: 3px solid var(--font-color); */
+  display: flex; align-items: center;
+  flex-direction: column; gap: 5px;
+}
+
+.post-info__item{
+  font-size: 14px;
+}
+
+.post-text{
+  width: 100%; height: max-content;
+  display: flex; align-items: flex-start;
+  flex-direction: column; gap: 10px;
+}
+
+.post-text__title{
+  color: var(--font-color-active);
+  width: 600px; height: max-content;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 32px;
+  line-height: 1;
+}
+
+.post-text__description{
+  width: 600px; height: max-content;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  overflow: hidden;
+  line-height: 1.1;
+  font-size: 16px;
+  opacity: 80%;
+}
+
+.post-text__tegs{
+  width: 250px; height: max-content;
+  display: flex; gap: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  
+  overflow-y: none;
+  overflow-x: scroll;
+  scrollbar-width: none;
+  scrollbar-color: transparent;
+}
+
+.post-text__tegs::-webkit-scrollbar{
+  background: transparent;
+  width: 1px;
+}
+
+.container-tegs__item_post{
+  font-size: 12px
+}
+
+.post-user{
+  position: absolute; right: 50px; bottom: 10px;
+  display: flex; align-items: baseline; gap: 13px;
+  width: max-content; height: max-content;
+}
+
+.post-user__name{
+  font-size: 16px;
+}
+
+.post-user__border{
+  font-weight: 900;
+  margin: 0px -4px;
+  font-size: 14px;
+}
+
+.post-user__date{
+  font-size: 16px;
+}
+
+/* search settings form */
+.form_post{
+  width: 100%; height: max-content;
+  gap: 3px;
+}
+
+.form_post-span{
+  display: flex; align-items: baseline;
+  flex-direction: row; gap: 7px;
+}
+
+.form_post-label{
+  font-size: 20px;
+}
+
+.form_post-input{
+  color: var(--font-color-active);
+  font-size: 16px;
+  border: none;
+  padding: 0;
+}
+
+.form_post-btn{
+  color: var(--font-color);
+  font-size: 16px;
+}
+
+/* loader */
+.loader-post{
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150px; height: 150px;
+}
+
+.loader-post__img{
+  object-fit: cover; object-position: center;
+  filter: drop-shadow( 0px 0px 30px #fff );
+  width: 100%; height: 100%;
+  user-select: none; 
+  opacity: 50%;
+}
+
+
+/* media */
+
+
+@media ( min-width: 1736px ) {
+
+  .cmd__post{
+    width: 1600px !important;
+  }
+
+  .cmd-title_post{
+    font-size: 20px !important;
+    width: 100% !important;
+  }
+
+  .cmd-body_post{
+    width: 100%; height: 778px;
+  }
+
+  .container-settings{
+    padding: 20px 40px;
+    width: 600px;
+    gap: 50px;
+  }
+
+  .form_post-span .form-label{
+    font-size: 24px !important;
+  }
+
+  .form_post-span .form_post-input{
+    font-size: 20px !important;
+  }
+
+  .container-filter{
+    gap: 8px;
+  }
+
+  .container-filter__subscribe{
+    font-size: 20px !important;
+  }
+
+  .container-filter__title{
+    font-size: 36px;
+  }
+
+  .container-filter__item{
+    font-size: 20px;
+  }
+
+  .container-tegs{
+    gap: 8px;
+  }
+
+  .container-tegs__title{
+    font-size: 36px;
+  }
+
+  .container-tegs__span{
+    height: 500px !important;
+    gap: 8px;
+  }
+
+  .container-tegs__item{
+    padding: 7px 13px;
+    font-size: 18px;
+  }
+
+  .container-create-post{
+    gap: 8px;
+  }
+
+  .form_create_post > .form-span > .form-label{
+    font-size: 24px !important;
+  }
+
+  .form_create_post > .form-span > .form-input{
+    font-size: 20px !important;
+  }
+
+  .form-description{
+    font-size: 20px !important;
+  }
+
+  /* circle */
+
+  .form_create_post .circle{
+    width: 15px !important;
+    height: 15px !important;
+  }
+
+  .form_create_post .inner {
+    width: 12px !important;
+    height: 12px !important;
+  }
+
+  .form_create_post > button {
+    font-size: 18px;
+    padding: 8px 15px;
+  }
+
+  .container-posts{
+    padding: 30px 30px;
+    gap: 30px;
+  }
+
+  .post-info{
+    width: 200px;
+    gap: 10px;
+  }
+
+  .post-info__item{
+    font-size: 16px;
+  }
+
+  .post-text{
+    gap: 15px;
+  }
+
+  .post-text__title{
+    width: 90%;
+    font-size: 36px !important;
+  }
+
+  .post-text__description{
+    width: 90%;
+    font-size: 20px !important;
+  }
+
+  .post-user__name {
+    font-size: 18px;
+  }
+
+  .post-user__border {
+    font-size: 16px;
+  }
+
+  .post-user__date {
+    font-size: 18px;
+  }
+
+}

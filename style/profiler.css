@@ -1,0 +1,19 @@
+.cmd__profile{
+  width: max-content;
+}
+
+.cmd-title_profile{
+  width: 100% !important;
+}
+
+.cmd-body_profile{
+  display: flex; align-items: center;
+  padding: 0px 40px;
+  height: 70px;
+  gap: 20px;
+}
+
+.profile-item{
+  display: flex; align-items: baseline;
+  gap: 7px;
+}

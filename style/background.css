@@ -1,0 +1,84 @@
+/* background - video */
+.background{
+  position: fixed; top: 0; left: 0;
+  background: rgba( 0, 0, 8, .1);
+  width: 100%; height: 100vh;
+  pointer-events: none;
+  perspective: 800px;
+  z-index: 9999;
+}
+
+.background > video{
+  object-fit: cover; object-position: center;
+  width: 100%; height: 100%;
+  opacity: 2%;
+}
+
+/* background - scanlines */
+.scanlines:before {
+  position:absolute; top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events:none;
+  display:block;
+  content:" ";
+  z-index:2;
+
+  background:linear-gradient(hsla(0,6%,7%,0) 50%,rgba(0,0,0,.25) 0),linear-gradient(90deg,rgba(255,0,0,.06),rgba(0,255,0,.02),rgba(0,0,255,.06));
+  background-size:100% 4px,6px 100%
+}
+
+.scanlines {
+  position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+  pointer-events: none;
+}
+
+/* background - loader */
+.loader{
+  position: fixed; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px; height: 200px;
+  pointer-events: none;
+  user-select: none;
+  z-index: -1;
+
+  animation: showLoader 0.5s ease-in-out;
+}
+
+@keyframes showLoader{
+  from { transform: translate( -50%, -45% ); opacity: 0; }
+  to { transform: translate( -50%, -50% ); opacity: 1; }
+}
+
+.loader__img{
+  object-fit: cover; object-position: center;
+  filter: drop-shadow( 0px 0px 30px #fff );
+  width: 100%; height: 100%;
+  user-select: none; 
+  opacity: 50%;
+}
+
+/* background - text */
+.background-text{
+  position: fixed; bottom: 1rem; left: 1rem;
+  filter: drop-shadow( 0px 0px 70px rgba(255, 255, 255, 0.7) );
+  max-width: 80%;
+  font-size: 16px;
+  opacity: 50%;
+}
+
+/* background - canvas */
+
+canvas{
+  pointer-events: none;
+  cursor: none;
+  opacity: 90%;
+}
+
+.canvas-upper{
+  position: absolute; top: 0; left: 0;
+  z-index: 9999 !important;
+  opacity: 50% !important;
+}
+
+.canvas-stars{
+  opacity: 50% !important;
+}

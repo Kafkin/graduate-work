@@ -1,0 +1,62 @@
+.cmd__rooms{
+  width: 430px;
+}
+
+.cmd-title_rooms{
+  width: 100%;
+}
+
+.cmd-body_rooms{
+  display: flex; align-items: flex-start;
+  flex-direction: column;
+  overflow-y: scroll;
+  position: relative;
+  padding: 20px 20px;
+  height: 400px;
+
+  scrollbar-width: none;
+}
+
+.cmd-body_rooms::-webkit-scrollbar{
+  background: transparent;
+  width: 1px;
+}
+
+.room-search{
+  margin-bottom: 20px;
+}
+
+/* room */
+.container-room{
+  display: flex; align-items: flex-start;
+  flex-direction: column; gap: 11px;
+  width: 100%; height: max-content;
+}
+
+.room{
+  border: 3px dashed var(--font-color);
+  display: flex; align-items: baseline;
+  width: 100%; height: max-content;
+  flex-direction: row; gap: 20px;
+  padding: 6px 11px;
+}
+
+.room__author{
+  font-size: 18px;
+}
+
+.room__title{
+  font-size: 16px;
+}
+
+.room:hover{
+  /* border-color: var(--font-color-active); */
+  background: var(--font-color-double);
+  transform: scale( 1.01 );
+}
+
+.room.active{
+  border-color: var(--font-color-active);
+  /* background: var(--font-color-double); */
+  transform: scale( 1.01 );
+}

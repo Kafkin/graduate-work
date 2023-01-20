@@ -1,0 +1,144 @@
+.cmd{
+  position: fixed; top: var(--y); left: var(--x);
+  width: max-content; height: max-content;
+  background: var(--background-color);
+  z-index: 20;
+  filter: brightness(130%);
+}
+
+.cmd.max-size{
+  width: 100vw !important; height: 100vh !important;
+}
+
+.cmd.max-size > .cmd-body{
+  height: calc( 100% - 35px );
+}
+
+.cmd-header{
+  display: flex; align-items: center; justify-content: flex-end;
+  border: 3px solid var(--font-color);
+  width: 100%; height: 38px;
+  padding: 0px 10px;
+  gap: 11px;
+}
+
+.cmd-hidden{
+  width: 300px !important;
+}
+
+.cmd-title{
+  display: flex; align-items: center;
+  color: var(--background-color);
+  background: var(--font-color);
+  width: 400px; height: 21px;
+  padding-left: 15px;
+  margin-right: auto;
+  user-select: none;
+  font-weight: 900;
+  font-size: 18px;
+}
+
+.cmd-icons{
+  display: flex; align-items: center;
+  width: 85px; 
+  gap: 11px;
+}
+
+.exit, .collapse, .expand, .size{
+  background: var(--font-color);
+  width: 21px; height: 21px;
+  position: relative;
+  display: block;
+}
+
+.exit::before, .exit::after{
+  position: absolute; top: 50%; left: 50%;
+  background: var(--background-color);
+  transform: translate( -50%, -50% ) rotateZ( 45deg );
+  width: 15px; height: 2px;
+  content: '';
+}
+
+.exit::after{
+  transform: translate( -50%, -50% ) rotateZ( -45deg );
+}
+
+.expand::before{
+  border: 2px solid var(--background-color);
+  position: absolute; top: 50%; left: 50%;
+  transform: translate( -50%, -50% );
+  width: 15px; height: 15px;
+  content: '';
+}
+
+.collapse::before{
+  border-bottom: 2px solid var(--background-color);
+  position: absolute; top: 50%; left: 50%;
+  transform: translate( -50%, -50% );
+  width: 15px; height: 15px;
+  content: '';
+}
+
+.size::before{
+  position: absolute; top: 50%; left: 50%;
+  background: var(--background-color);
+  transform: translate( -50%, -50% );
+  width: 15px; height: 2px;
+  content: '';
+}
+
+.size::after{
+  transform: translate( -50%, -50% ) rotateZ( 90deg );
+  position: absolute; top: 50%; left: 50%;
+  background: var(--background-color);
+  width: 15px; height: 2px;
+  content: '';
+}
+
+.cmd-body{
+  border: 3px solid var(--font-color);
+  transform: translateY( -3px );
+  /* transition: 0.20s; */
+  overflow-x: hidden;
+}
+
+/* .cmd_center{
+  transform: translate( -50%, -50% );
+} */
+
+/* animation */
+/* .body-enter-active, .body-leave-active {
+  transition: 0.25s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+} */
+
+/* .body-enter-to{
+  transform: translateY( -3px );
+  opacity: 1;
+}
+
+.body-leave-to{
+  transform: translate( 10px, 13px );
+  opacity: 0;
+} */
+
+@media ( min-width: 1736px ) {
+
+  .cmd-header{
+    height: 46px !important;
+  }
+
+  .cmd-title{
+    height: 26px;
+    font-size: 22px !important;
+  }
+
+  .cmd-icons{
+    width: max-content !important;
+    gap: 15px !important;
+  }
+
+  .collapse, .expand, .exit{
+    width: 24px !important; height: 24px !important;
+  }
+
+}

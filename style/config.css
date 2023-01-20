@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Lekton:wght@400;700&display=swap');
+
+*,*::before,*::after{
+  cursor: none !important;
+  box-sizing: border-box;
+  user-select: none;
+  padding: 0;
+  margin: 0;
+}
+
+[v-cloak]{
+  display: none;
+}
+
+/* variables */
+:root{
+  --background-color: #070707;
+
+  --font-color-double: #a5a5a52e;
+  --font-color-active: #66f2ff;
+  --font-color-error: #ff6666;
+  --font-color: #a5a5a5;
+
+  --header-fs: 18px;
+  --header-h: 5rem;
+
+  --mouse-border-size: 38px;
+  --mouse-size: 6px;
+}
+
+body{
+  max-width: 100vw; min-height: 100vh;
+  background: var(--background-color);
+  scrollbar-color: transparent;
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar{
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar-track{
+  scrollbar-color: transparent;
+}
+
+#app{
+  font-family: 'Lekton', sans-serif;
+  color: var(--font-color);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+}
+
+/* reset */
+h1,h2,h3,h4,h5,h6, p{
+  font-size: 18px;
+}
+
+li,ul, ol{
+  list-style: none;
+  padding: 0;
+}
+
+button{
+  background: transparent;
+  cursor: pointer;
+  border: none;
+}
+
+input{
+  background: transparent;
+  outline: none;
+  border: none;
+  /* color: #37ff00; */
+}
+
+a{
+  text-decoration: none;
+  color: inherit;
+}
+
+/* изначальный размер экрана 1536px на 778px */
+
+.mouse{
+  position: fixed; top: 0; left: 0;
+  filter: drop-shadow(0 0 5px var(--font-color-active));
+  transform: translate( var(--mouseX), var(--mouseY) );
+  width: var(--mouse-size); height: var(--mouse-size);
+  background: var(--font-color-active);
+  border-radius: 50%;
+  z-index: 9999999;
+  display: none;
+  opacity: 80%;
+}
+
+.mouse::before{
+  width: var(--mouse-border-size); height: var(--mouse-border-size);
+  filter: drop-shadow(0 0 5px var(--font-color-active)) drop-shadow(0 0 20px var(--font-color-active));
+  border: 2px solid var(--font-color-active);
+  position: absolute; top: 50%; left: 50%;
+  transform: translate( -50%, -50% );
+  border-radius: 50%;
+  content: '';
+}
+
+.default-span{
+  font-family: inherit;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+span.active{
+  color: var(--font-color-active);
+}

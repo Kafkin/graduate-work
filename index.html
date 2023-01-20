@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <!-- config style -->
+  <link rel="stylesheet" href="./style/config.css">
+
+  <!-- style -->
+  <link rel="stylesheet" href="./style/background.css">
+  <link rel="stylesheet" href="./style/navigation.css">
+  <link rel="stylesheet" href="./style/cmd.css">
+  <link rel="stylesheet" href="./style/info-post.css">
+  <link rel="stylesheet" href="./style/profiler.css">
+  <link rel="stylesheet" href="./style/settings.css">
+  <link rel="stylesheet" href="./style/messages.css">
+  <link rel="stylesheet" href="./style/rooms.css">
+  <link rel="stylesheet" href="./style/about.css">
+  <link rel="stylesheet" href="./style/form.css">
+  <link rel="stylesheet" href="./style/posts.css">
+  <link rel="stylesheet" href="./style/login.css">
+  <link rel="stylesheet" href="./style/registration.css">
+  <link rel="stylesheet" href="./style/update-post.css">
+  <link rel="stylesheet" href="./style/create-answer.css">
+  <link rel="stylesheet" href="./style/text.css">
+  <link rel="stylesheet" href="./style/error.css">
+  
+  <!-- pusher -->
+  <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+  
+  <!-- vue -->
+  <script src="./script/vue.global.js"></script>
+  
+  <!-- script -->
+  <script src="./script/app.prod.js" type="module"></script>
+
+</head>
+<body id="app">
+
+  <v-error 
+    :message="el" 
+    :index="index" 
+    :style="{ '--top': index, '--duration': index + 1, '--error-color': error.color }" 
+    v-for="( el, index ) in error.messages" :key="index"
+    v-model="error.active" 
+    @click="error.active = false"
+  ></v-error>
+
+  <div class="loader" v-if="steps.loader.status" v-cloak>
+    <img class="loader__img" src="./assets/gif/Untitled 14-Nov-2022-213929.gif" alt="loader">
+  </div>
+
+  <div class="background" v-cloak>
+    <div class="scanlines"></div>
+    <v-canvasone v-if="current.component === 'vCanvasone'"></v-canvasone>
+    <v-canvastwo v-if="current.component === 'vCanvastwo'" :color="current.color"></v-canvastwo>
+    <v-canvasup v-if="current.component === 'vCanvastwo' || current.component === 'vCanvasone'"></v-canvasup>
+    <v-canvasthree v-if="current.component === 'vCanvasthree'" :color="current.color"></v-canvasthree>
+    <div class="mouse" v-if="steps.settings.status" ref="mouse"></div>
+    <v-text v-if="!steps.text.status"></v-text>
+  </div>
+  
+  <v-cmd 
+    v-if="steps.settings.status && isActiveWindow( 'navigation' )"
+    v-model:active="current.activeWindow" 
+    :settings="{ name: 'navigation' }"
+    v-model="current.windows" 
+    class="cmd__nav"
+  >
+    <template v-slot:cmd-header>
+      <div class="cmd-title cmd-title_nav">navigation</div>
+    </template>
+    
+    <template v-slot:cmd-body>
+      <div class="cmd-body cmd-body_nav">
+        <span class="cmd-body_nav__item" v-for="el in filterNavigation" :key="el" :class="{ 'active': isActiveWindow( el.title ) }" @click.prevent="el.title === 'exit' ? exit() : !isActiveWindow( el.title ) && current.windows.push( el.title ), current.activeWindow = el.title">
+          <img class="cmd-body_nav__item-img" v-if="!isActiveWindow( el.title )" :src="`./assets/icon/${ el.white_img }.png`" alt="folder">
+          <img class="cmd-body_nav__item-img" v-if="isActiveWindow( el.title )" :src="`./assets/icon/${ el.black_img }.png`" alt="folder">
+          <a href="#" class="cmd-body_nav__item-title">{{ el.title }}</a>
+        </span>
+      </div>
+    </template>
+  </v-cmd>
+
+
+
+  <v-cmd 
+    :settings="{ name: 'posts', index: 100 }" 
+    v-model:active="current.activeWindow" 
+    v-if="isActiveWindow( 'posts' )" 
+    v-model="current.windows" 
+    class="cmd__post"
+  >
+    <template v-slot:cmd-header>
+      <div class="cmd-title cmd-title_post">posts</div>
+    </template>
+    
+    <template v-slot:cmd-body>
+      <div class="cmd-body cmd-body_post">
+        
+        <div class="container-settings">
+          <span class="container-filter">
+            <!-- <p class="container-filter__title">Search</p> -->
+            <form action="#" class="form form_post">
+              <span class="form-span form_post-span">
+                <label for="#" class="form-label form_post-label">D:\Search\</label>
+                <input type="text" class="form-input form_post-input" v-model="current.search">
+              </span>
+            </form>
+            <p class="container-filter__subscribe">Press enter to search</p>
+          </span>
+
+          <span class="container-filter">
+            <p class="container-filter__title">Filters</p>
+            <p class="container-filter__item" v-for="el in arrayFilters" :key="el" @click="current.filter === el ? current.filter = null : current.filter = el" :class="{ 'active': current.filter === el }">{{ el }}</p>
+          </span>
+
+          <span class="container-tegs">
+            <p class="container-tegs__title">Tegs</p>
+            <span class="container-tegs__span">
+              <p class="container-tegs__item" v-for="el in tegs" :key="el" @click="isActiveTegs( el )" :class="{ 'active': current.tegs.includes( el ) }">{{ el }}</p>
+            </span>
+          </span>
+
+          <span class="container-create-post" v-if="current.user">
+            <p class="container-tegs__title">Create post</p>
+            <span class="container-create-post__span">
+              <form action="#" class="form form_create_post" @submit.prevent="createPost">
+                <v-input v-for="el in inputCreatePost" :key="el" v-model="formCreatePost[ el.where ]" :settings="el.settings"></v-input>
+                <p class="form-description">Scroll up to select post tegs</p>
+                <button class="form-btn" type="submit" :disabled="!isActiveCreatePostBtn">create</button>
+              </form>
+            </span>
+          </span>
+        </div>
+
+        <div class="container-posts">
+          <div class="loader-post" v-if="current.loaderPost" v-cloak>
+            <img class="loader-post__img" src="./assets/gif/Untitled 14-Nov-2022-213929.gif" alt="loader">
+          </div>
+
+          <div class="post" v-activing v-for="el in filterPosts" :key="el" @click="!isActiveWindow( 'info-post' ) && current.windows.push( 'info-post' ), current.activeWindow = 'info-post', current.post = el, eventAnswer()">
+            <span class="post-info">
+              <p class="post-info__item">likes: {{ el.likes ? el.likes.length : 0 }}</p>
+              <p class="post-info__item">answers: {{ el.answers ? el.answers.length : 0 }}</p>
+              <p class="post-info__item">wiews: {{ el.wiews ? el.wiews.length : 0 }}</p>
+            </span>
+
+            <span class="post-text">
+              <p class="post-text__title">{{ el.title }}</p>
+              <p class="post-text__description">{{ el.description }}</p>
+              <span class="post-text__tegs">
+                <p class="container-tegs__item container-tegs__item_post" v-for="teg in el.tegs">{{ teg }}</p>
+              </span>
+            </span>
+            
+            <span class="post-user">
+              <p class="post-user__name">author: {{ el.author.name }}</p>
+              <p class="post-user__border">/</p>
+              <p class="post-user__date">date public: {{ el.date }}</p>
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </template>
+  </v-cmd>
+
+
+
+  <v-cmd 
+    v-model:active="current.activeWindow" 
+    v-if="isActiveWindow( 'profiler' )"
+    :settings="{ name: 'profiler', index: 99 }"
+    v-model="current.windows"
+    class="cmd__profile"
+  >
+    <template v-slot:cmd-header>
+      <div class="cmd-title cmd-title_profile">profiler</div>
+    </template>
+    
+    <template v-slot:cmd-body>
+      <div class="cmd-body cmd-body_profile">
+        <p class="profile-item">Имя: {{ current.user ? current.user.user_name : Noname }}</p>
+        <p class="profile-item">Уровень прогресса: {{ current.user ? current.user.user_lvl : Noname }}</p>
+        <p class="profile-item">Уровень доступа: {{ current.user ? current.user.user_role : Noname }}</p>
+      </div>
+    </template>
+  </v-cmd>
+
+  <v-cmd 
+    v-model:active="current.activeWindow" 
+    v-if="isActiveWindow( 'about' )"
+    :settings="{ name: 'about', index: 99 }"
+    v-model="current.windows"
+    class="cmd__about"
+  >
+    <template v-slot:cmd-header>
+      <div class="cmd-title cmd-title_about">about</div>
+    </template>
+    
+    <template v-slot:cmd-body>
+      <div class="cmd-body cmd-body_about">
+        <p class="cmd-body_about__text" v-scramble="{ char: '01', amount: 100, speed: 100 }">
+          Это сайт портфолио Авосапянц Сергея Эдуардовича, сайт был сделан в 1999г в сарае у деда на мальдивах,
+          сайт предстовляет из себя помойку модальных окон которые можно уменьшать, увеличивать до исходного
+          состояния и закрывать. Несколько окон были сделаны на отъебись как и вся работа в принцыпе, кроме
+          страницы posts и message.
+        </p>
+      </div>
+    </template>
+  </v-cmd>
+
+  
+
+  <v-cmd 
+    :settings="{ name: 'info-post', index: 101 }" 
+    v-model:active="current.activeWindow" 
+    v-if="isActiveWindow( 'info-post' )" 
+    v-model="current.windows" 
+    class="cmd__info-post"
+  >
+    <template v-slot:cmd-header>
+      <div class="cmd-title cmd-title_info-post">info post</div>
+    </template>
+    
+    <template v-slot:cmd-body>
+      <div class="cmd-body cmd-body_info-post">
+        <div class="loader-info-post" v-if="current.loaderCurrentPost" v-cloak>
+          <img class="loader-info-post__img" src="./assets/gif/Untitled 14-Nov-2022-213929.gif" alt="loader">
+        </div>
+
+        <div class="cmd-body_info-post__inner-container" v-if="!current.loaderCurrentPost">
+          <h1 class="info-post__title">{{ current.post.title }}</h1>
+          <span class="info-post__span">
+            <p class="info-post__user">Author: {{ current.post.author.name }}</p>
+            <p class="info-post__border">/</p>
+            <p class="info-post__date">Date public: {{ current.post.date }}</p>
+            <span class="info-post__container-btn" v-if="current.user && current.post.author.id !== current.user.user_id">
+              <button class="info-post__settings-btn info-post__settings-btn_hight" @click="updateLike()" :class="{ 'active': current.post.likes.find( el => el.user_id === current.user.user_id ) }">like</button>
+            </span>
+          </span>
+          <p class="info-post__description">{{ current.post.description }}</p>
+          
+          <span class="info-post__comments" v-if="current.post.answers.length">
+            <p class="info-post__comments-title">Answers: </p>
+            <span class="info-post__comment" v-for="el in current.post.answers" :key="el">
+              <span class="info-post__span info-post__span_comment">
+                <p class="info-post__comment-user">Author: {{ el.author.name }}</p>
+                <p class="info-post__border">/</p>
+                <p class="info-post__comment-date">Date public: {{ el.date }}</p>
+                <span class="info-post__container-btn" v-if="current.user">
+                  <button class="info-post__settings-btn info-post__settings-btn_small" @click="deleteAnswer( el.id )" v-if="el.author.id === current.user.user_id">delete</button>
+                  <button class="info-post__settings-btn info-post__settings-btn_small" @click="updateAnswer( el.id, true )" v-if="!el.correct && current.user.user_id === current.post.author.id">mark answer</button>
+                  <button class="info-post__settings-btn info-post__settings-btn_small" @click="updateAnswer( el.id, 0 )" v-if="el.correct && current.user.user_id === current.post.author.id">unmark answer</button>
+                </span>
+              </span>
+              
+              <p class="info-post__comment-text" :class="{ 'info-post__comment-text_active': el.correct }">{{ el.text }}</p>
+            </span>
+          </span>
+  
+          <span class="info-post__settings" v-if="current.user">
+            <button class="info-post__settings-btn" @click="deletePost(), current.post = null" v-if="current.post.author.id === current.user.user_id">delete</button>
+            <button class="info-post__settings-btn" @click="!isActiveWindow( 'update-post' ) && current.windows.push( 'update-post' ), current.activeWindow = 'update-post', selectPost()" v-if="current.post.author.id === current.user.user_id">update</button>
+            <button class="info-post__settings-btn" @click="!isActiveWindow( 'create-answer' ) && current.windows.push( 'create-answer' ), current.activeWindow = 'create-answer'">create answer</button>
+          </span>
+        </div>
+      </div>
+    </template>
+  </v-cmd>
+
+
+
+  <v-cmd 
+    v-model:active="current.activeWindow" 
+    v-if="isActiveWindow( 'create-answer' )"
+    :settings="{ name: 'create-answer', index: 100 }"
+    v-model="current.windows" 
+    class="cmd__create-answer"
+  >
+    <template v-slot:cmd-header>
+      <div class="cmd-title cmd-title_create-answer">update post</div>
+    </template>
+    
+    <template v-slot:cmd-body>
+      <div class="cmd-body cmd-body_create-answer">
+        <form action="#" class="form form_create-answer" @submit.prevent="createAnswer" v-if="current.user">
+          <v-input v-for="el in inputCreateAnswer" :key="el" v-model="formCreateAnswer[ el.where ]" :settings="el.settings"></v-input>
+          <button class="form-btn" type="submit" :disabled="!isActiveCreateAnswerBtn">add answer</button>
+        </form>
+      </div>
+    </template>
+  </v-cmd>
+
+
+
+  <v-cmd 
+    v-model:active="current.activeWindow" 
+    v-if="isActiveWindow( 'update-post' )"
+    :settings="{ name: 'update-post', index: 100 }"
+    v-model="current.windows" 
+    class="cmd__update-post"
+  >
+    <template v-slot:cmd-header>
+      <div class="cmd-title cmd-title_update-post">update post</div>
+    </template>
+    
+    <template v-slot:cmd-body>
+      <div class="cmd-body cmd-body_update-post">
+        <form action="#" class="form form_update-post" @submit.prevent="updatePost">
+          <v-input v-for="el in inputUpdatePost" :key="el" v-model="formUpdatePost[ el.where ]" :settings="el.settings"></v-input>
+          <span class="container-tegs__span">
+            <p class="container-tegs__item" v-for="el in tegs" :key="el" @click="isActivePostTegs( el )" :class="{ 'active': formUpdatePost.tegs.includes( el ) }">{{ el }}</p>
+          </span>
+          <button class="form-btn" type="submit" :disabled="!isActiveUpdatePostBtn">save</button>
+        </form>
+      </div>
+    </template>
+  </v-cmd>
+
+
+  
+  <v-cmd 
+    v-model:active="current.activeWindow" 
+    v-if="isActiveWindow( 'settings' )"
+    :settings="{ name: 'settings', index: 100 }"
+    v-model="current.windows" 
+    class="cmd__settings"
+  >
+    <template v-slot:cmd-header>
+      <div class="cmd-title cmd-title_settings">settings</div>
+    </template>
+    
+    <template v-slot:cmd-body>
+      <div class="cmd-body cmd-body_settings">
+        <p class="settings-title">Выбор цветовой гаммы: </p>
+        <span class="settings-span">
+          <button class="settings-btn" v-for="el in colors" :key="el" @click="colorTheme( el )" :class="{ 'active': current.color && current.color.title === el.title }">{{ el.title }}</button>
+        </span>
+
+        <p class="settings-title">Выбор заднего фона: </p>
+        <span class="settings-span">
+          <button class="settings-btn" @click="setCanvas( 'vCanvasone' )" :class="{ 'active': current.component === 'vCanvasone' }">триугольники</button>
+          <button class="settings-btn" @click="setCanvas( 'vCanvastwo' )" :class="{ 'active': current.component === 'vCanvastwo' }">точки</button>
+          <button class="settings-btn" @click="setCanvas( 'vCanvasthree' )" :class="{ 'active': current.component === 'vCanvasthree' }">зведзы</button>
+        </span>
+      </div>
+    </template>
+  </v-cmd>
+
+
+
+  <v-cmd 
+    v-model:active="current.activeWindow" 
+    v-if="isActiveWindow( 'rooms' )"
+    :settings="{ name: 'rooms', index: 100 }"
+    v-model="current.windows" 
+    class="cmd__rooms"
+  >
+    <template v-slot:cmd-header>
+      <div class="cmd-title cmd-title_rooms">rooms</div>
+    </template>
+    
+    <template v-slot:cmd-body>
+      <div class="cmd-body cmd-body_rooms">
+
+        <span class="container-filter room-search">
+          <!-- <p class="container-filter__title">Search</p> -->
+          <form action="#" class="form form_post">
+            <span class="form-span form_post-span">
+              <label for="#" class="form-label form_post-label">D:\Search\</label>
+              <input type="text" class="form-input form_post-input" v-model="current.searchRoom">
+            </span>
+          </form>
+          <p class="container-filter__subscribe">Press enter to search</p>
+        </span>
+
+        <div class="container-room">
+          <div class="room" 
+            v-for="el in filterRooms" :key="el" 
+            :class="{ 'active': current.room && current.room.id === el.id && isActiveWindow( 'messages' ) }" 
+            @click="
+              messages = null,
+              activeRoom = false,
+              current.room = null,
+              formRoomPassword.password = null,
+              !isActiveWindow( 'messages' ) && current.windows.push( 'messages' ),
+              current.activeWindow = 'messages',
+              current.room = el"
+          >
+            <p class="room__author">Author: <span class="default-span active">{{ el.author.name }}</span></p>
+            <p class="room__title">Title: {{ el.title }}</p>
+          </div>
+        </div>
+
+      </div>
+    </template>
+  </v-cmd>
+
+  
+
+  <v-cmd 
+    v-model:active="current.activeWindow" 
+    v-if="isActiveWindow( 'login' )"
+    :settings="{ name: 'login', index: 100 }"
+    v-model="current.windows" 
+    class="cmd__login"
+  >
+    <template v-slot:cmd-header>
+      <div class="cmd-title cmd-title_login">login</div>
+    </template>
+    
+    <template v-slot:cmd-body>
+      <div class="cmd-body cmd-body_login">
+        <form action="#" class="form form_log" @submit.prevent="log">
+          <v-input v-for="el in inputLog" :key="el" v-model="formLog[ el.where ]" :settings="el.settings"></v-input>
+          <button class="form-btn" type="submit" :disabled="!isActiveLogBtn">login</button>
+        </form>
+      </div>
+    </template>
+  </v-cmd>
+
+
+
+  <v-cmd 
+    v-model:active="current.activeWindow" 
+    v-if="isActiveWindow( 'registration' )"
+    :settings="{ name: 'registration', index: 100 }"
+    v-model="current.windows" 
+    class="cmd__registration"
+  >
+    <template v-slot:cmd-header>
+      <div class="cmd-title cmd-title_registration">registration</div>
+    </template>
+    
+    <template v-slot:cmd-body>
+      <div class="cmd-body cmd-body_registration">
+        <form action="#" class="form form_reg" @submit.prevent="reg">
+          <v-input v-for="el in inputReg" :key="el" v-model="formReg[ el.where ]" :settings="el.settings"></v-input>
+          <button class="form-btn" type="submit" :disabled="!isActiveRegBtn">registration</button>
+        </form>
+      </div>
+    </template>
+  </v-cmd>
+
+
+
+  <v-cmd 
+    v-model:active="current.activeWindow" 
+    v-if="isActiveWindow( 'messages' )"
+    :settings="{ name: 'messages', index: 100 }"
+    v-model="current.windows" 
+    class="cmd__messages"
+  >
+    <template v-slot:cmd-header>
+      <div class="cmd-title cmd-title_messages">messages</div>
+    </template>
+    
+    <template v-slot:cmd-body>
+      <div class="cmd-body cmd-body_messages">
+
+        <form action="#" class="form form_create-answer form_messages" @submit.prevent="getMessagesRoom" v-if="!activeRoom">
+          <v-input v-for="el in inputRoomPassword" :key="el" v-model="formRoomPassword[ el.where ]" :settings="el.settings"></v-input>
+          <button class="form-btn" type="submit" :disabled="!isActiveRoomPasswordBtn">select</button>
+        </form>
+
+        <div class="container-messages" ref="containerMessages" v-if="activeRoom && !roomType">
+          <p class="message" v-for="el in messages" :key="el" :class="{ 'your': el.author.id === current.user.user_id }"><span class="default-span active">{{ el.author.name }}:</span> {{ el.text }} <span class="default-span active message-span">{{ el.date }}</span></p>
+        </div>
+
+        <form action="#" class="form form_post form_create-messages" @submit.prevent="!current.sendStop && createMessage()" v-if="activeRoom && !roomType">
+          <span class="form-span form_post-span form_create-messages-span">
+            <input type="text" placeholder="enter yout message" class="form-input form_post-input form_create-messages-input" v-model="current.messageText">
+            <button class="form-btn form_create-messages-btn" type="submit" :disabled="!isActiveNewMessageBtn">send</button>
+          </span>
+        </form>
+
+        <form action="#" class="form form_post form_create-messages_share" @submit.prevent="!current.sendStop && createMessage()" v-if="activeRoom && roomType">
+          <span class="form-span form_post-span form_create-messages_share-span">
+            <textarea placeholder="enter yout code" class="form-input form_post-input form_create-messages_share-input" :disabled="current.user.user_name !== current.room.recording" v-model="messageTextarea"></textarea>
+          </span>
+        </form>
+
+      </div>
+    </template>
+  </v-cmd>
