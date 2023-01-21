@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="./style/profiler.css">
   <link rel="stylesheet" href="./style/settings.css">
   <link rel="stylesheet" href="./style/messages.css">
+  <link rel="stylesheet" href="./style/render.css">
   <link rel="stylesheet" href="./style/rooms.css">
   <link rel="stylesheet" href="./style/about.css">
   <link rel="stylesheet" href="./style/form.css">
@@ -120,7 +121,7 @@
           </span>
 
           <span class="container-tegs">
-            <p class="container-tegs__title">Tegs</p>
+            <p class="container-tegs__title">Tags</p>
             <span class="container-tegs__span">
               <p class="container-tegs__item" v-for="el in tegs" :key="el" @click="isActiveTegs( el )" :class="{ 'active': current.tegs.includes( el ) }">{{ el }}</p>
             </span>
@@ -131,7 +132,7 @@
             <span class="container-create-post__span">
               <form action="#" class="form form_create_post" @submit.prevent="createPost">
                 <v-input v-for="el in inputCreatePost" :key="el" v-model="formCreatePost[ el.where ]" :settings="el.settings"></v-input>
-                <p class="form-description">Scroll up to select post tegs</p>
+                <p class="form-description">Scroll up to select post tags</p>
                 <button class="form-btn" type="submit" :disabled="!isActiveCreatePostBtn">create</button>
               </form>
             </span>
@@ -345,7 +346,7 @@
 
         <p class="settings-title">Выбор заднего фона: </p>
         <span class="settings-span">
-          <button class="settings-btn" @click="setCanvas( 'vCanvasone' )" :class="{ 'active': current.component === 'vCanvasone' }">триугольники</button>
+          <button class="settings-btn" @click="setCanvas( 'vCanvasone' )" :class="{ 'active': current.component === 'vCanvasone' }">треугольники</button>
           <button class="settings-btn" @click="setCanvas( 'vCanvastwo' )" :class="{ 'active': current.component === 'vCanvastwo' }">точки</button>
           <button class="settings-btn" @click="setCanvas( 'vCanvasthree' )" :class="{ 'active': current.component === 'vCanvasthree' }">зведзы</button>
         </span>
@@ -482,14 +483,37 @@
         
         <form action="#" class="form form_post form_create-messages_share" @submit.prevent="!current.sendStop && createMessage()" v-if="activeRoom && roomType">
           <span class="form-span form_post-span form_create-messages_share-span">
-            <textarea placeholder="enter yout code" class="form-input form_post-input form_create-messages_share-input" :disabled="current.user.user_name !== current.room.recording" v-model="messageTextarea"></textarea>
+            <textarea placeholder="enter yout code" class="form-input form_post-input form_create-messages_share-input" v-if="current.typeArea === 'html'" :disabled="current.user.user_name !== current.room.recording" v-model="messageTextarea"></textarea>
+            <textarea placeholder="enter yout code" class="form-input form_post-input form_create-messages_share-input" v-if="current.typeArea === 'css'" :disabled="current.user.user_name !== current.room.recording" v-model="messageTextareaDB"></textarea>
           </span>
         </form>
         
-        <span class="span__container" v-if="activeRoom && roomType && current.user.user_id === current.room.author.id">
-          <input type="text" placeholder="enter name" class="form-input form-input_parb" v-model="current.recording">
-          <button class="form-btn form-btn_parb" @click="updateRoom">recording</button>
+        <span class="span__container" v-if="activeRoom && roomType">
+          <input type="text" placeholder="enter name" class="form-input form-input_parb" v-model="current.recording" v-if="current.user.user_id === current.room.author.id">
+          <button class="form-btn form-btn_parb" @click="updateRoom" v-if="current.user.user_id === current.room.author.id">recording</button>
+          <button class="form-btn form-btn_parb" @click.prevent="!isActiveWindow( 'render' ) && current.windows.push( 'render' ), current.activeWindow = 'render'">render</button>
+          <button class="form-btn form-btn_parb" @click.prevent="current.typeArea === 'html' ? current.typeArea = 'css' : current.typeArea = 'html'">{{ current.typeArea === 'html' ? 'css' : 'html' }}</button>
         </span>
+      </div>
+    </template>
+  </v-cmd>
+
+
+
+  <v-cmd 
+    v-model:active="current.activeWindow" 
+    v-if="isActiveWindow( 'render' )"
+    :settings="{ name: 'render', index: 100 }"
+    v-model="current.windows" 
+    class="cmd__render"
+  >
+    <template v-slot:cmd-header>
+      <div class="cmd-title cmd-title_render">render</div>
+    </template>
+    
+    <template v-slot:cmd-body>
+      <div class="cmd-body cmd-body_render render-container" v-html="render()">
+        {{ render() }}
       </div>
     </template>
   </v-cmd>

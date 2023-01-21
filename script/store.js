@@ -11,6 +11,7 @@ export default {
     loaderCurrentPost: false,
     loaderRoom: false,
     messageText: null,
+    typeArea: 'html',
     searchRoom: null,
     sendStop: false,
     recording: null,
@@ -24,9 +25,11 @@ export default {
   
   timeMessage: null,
   dropFillMessage: true,
-  messageTextarea: null,
   activeRoom: false,
-
+  
+  messageTextareaDB: null,
+  messageTextarea: null,
+  
   error: {
     messages: [],
     color: 'green',

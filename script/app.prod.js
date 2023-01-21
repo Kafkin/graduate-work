@@ -28,14 +28,35 @@ Vue
           if( this.dropFillMessage ) {
             clearTimeout( this.timeMessage )
             this.dropFillMessage = false
-
+            
             this.timeMessage = setTimeout(async () => {
               const res = await helper.post( 'https://serega-test.store/api/messages/update', {
                 refresh_token: localStorage.getItem( 'refresh_token' ),
                 access_token: localStorage.getItem( 'access_token' ),
                 password: this.formRoomPassword.password,
                 room_id: this.current.room.id,
-                text: newVal,
+                text: `${ newVal }#css${ this.messageTextareaDB }`
+              });
+            }, 100)
+
+            this.dropFillMessage = true
+          }
+        }
+      },
+
+      async messageTextareaDB( newVal, oldVal ) {
+        if( this.current.user.user_name === this.current.room.recording ) {
+          if( this.dropFillMessage ) {
+            clearTimeout( this.timeMessage )
+            this.dropFillMessage = false
+            
+            this.timeMessage = setTimeout(async () => {
+              const res = await helper.post( 'https://serega-test.store/api/messages/update', {
+                refresh_token: localStorage.getItem( 'refresh_token' ),
+                access_token: localStorage.getItem( 'access_token' ),
+                password: this.formRoomPassword.password,
+                room_id: this.current.room.id,
+                text: `${ this.messageTextarea }#css${ newVal }`
               });
             }, 100)
 
@@ -47,6 +68,15 @@ Vue
 
     methods: {
 
+      render() {
+        return `
+          ${ this.messageTextarea }
+          <style>
+            ${ this.messageTextareaDB }
+          </style>
+        `
+      },
+      
       async updateRoom() {
         const res = await helper.post( 'https://serega-test.store/api/rooms/update', {
           refresh_token: localStorage.getItem( 'refresh_token' ),
@@ -100,7 +130,8 @@ Vue
             this.messages = data.message
             this.$refs.containerMessages.scrollTop = 99999999999999
           } else if( this.current.user.user_name !== this.current.room.recording ) {
-            this.messageTextarea = data.message[ data.message.length - 1 ].text
+            let [ html, css ] = data.message[ data.message.length - 1 ].text.split('#css')
+            this.messageTextarea = html; this.messageTextareaDB = css;
             this.current.room.recording = data.recording
           }
         });
@@ -121,7 +152,8 @@ Vue
             return
           }
           
-          this.messageTextarea = res_two[0].text
+          let [ html, css ] = await res_two[0].text.split('#css')
+          this.messageTextarea = html; this.messageTextareaDB = css.includes('.render-container') ? css : '.render-container{}' + css;
         }
       },
 

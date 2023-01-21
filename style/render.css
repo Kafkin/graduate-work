@@ -1,0 +1,12 @@
+.cmd__render{
+  width: 1400px;
+}
+
+.cmd-title_render{
+  width: 100%;
+}
+
+.cmd-body_render{
+  width: 100%; height: 600px;
+  position: relative;
+}
