@@ -157,7 +157,7 @@ Vue
         this.messages = res === null || res === undefined ? [] : res
         this.current.loaderRoom = false
         
-        this.channelMessage.bind(`message-event${ this.current.room ? this.current.room.id + '' + this.current.room.password : 0 }`, ( data ) => {
+        this.channelMessage.bind(`message-event${ this.current.room ? this.current.room.id + '' + (this.current.room.password || 0) : 0 }`, ( data ) => {
           if( this.current.room.type === 'chat' ) {
             this.current.loaderRoom = false
             this.messages = data.message
