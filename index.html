@@ -369,7 +369,6 @@
     
     <template v-slot:cmd-body>
       <div class="cmd-body cmd-body_rooms">
-
         <span class="container-filter room-search">
           <!-- <p class="container-filter__title">Search</p> -->
           <form action="#" class="form form_post">
@@ -379,6 +378,26 @@
             </span>
           </form>
           <p class="container-filter__subscribe">Press enter to search</p>
+        </span>
+
+        <span class="container-create-post container-create-post_room" v-if="current.user">
+          <p class="container-tegs__title container-tegs__title_room" @click="showFormCreateRoom = !showFormCreateRoom">Create room</p>
+          <span class="container-create-post__span" v-if="showFormCreateRoom">
+            <form action="#" class="form form_create_post form_create_room" @submit.prevent="createRoom">
+              <v-input v-for="el in inputCreateRoom" :key="el" v-model="formCreateRoom[ el.where ]" :settings="el.settings"></v-input>
+              <div class="form-span_room_group">
+                <span class="form-span form-span_room">
+                  <label for="typeChatRoomOne" class="form-label" :class="{ 'active': formCreateRoom.type === 'chat' }">Type 'chat'</label>
+                  <input type="radio" class="form-input_room" name="typeChatRoom" id="typeChatRoomOne" value="chat" checked v-model="formCreateRoom.type">
+                </span>
+                <span class="form-span form-span_room">
+                  <label for="typeChatRoomTwo" class="form-label" :class="{ 'active': formCreateRoom.type === 'share' }">Type 'share'</label>
+                  <input type="radio" class="form-input_room" name="typeChatRoom" id="typeChatRoomTwo" value="share" v-model="formCreateRoom.type">
+                </span>
+              </div>
+              <button class="form-btn" type="submit" :disabled="!isActiveCreateRoomBtn">create</button>
+            </form>
+          </span>
         </span>
 
         <div class="container-room">
@@ -467,8 +486,13 @@
 
         <form action="#" class="form form_create-answer form_messages" @submit.prevent="getMessagesRoom" v-if="!activeRoom">
           <v-input v-for="el in inputRoomPassword" :key="el" v-model="formRoomPassword[ el.where ]" :settings="el.settings"></v-input>
-          <button class="form-btn" type="submit" :disabled="!isActiveRoomPasswordBtn">select</button>
+          <!-- <button class="form-btn" type="submit" :disabled="!isActiveRoomPasswordBtn">select</button> -->
+          <button class="form-btn" type="submit">select</button>
         </form>
+        
+        <span class="span__container" v-if="!activeRoom && current.room.author.name === current.user.user_name" style="margin: 10px;">
+          <button class="form-btn form-btn_parb" @click.prevent="deleteRoom">delete room</button>
+        </span>
 
         <div class="container-messages" ref="containerMessages" v-if="activeRoom && !roomType">
           <p class="message" v-for="el in messages" :key="el" :class="{ 'your': el.author.id === current.user.user_id }"><span class="default-span active">{{ el.author.name }}:</span> {{ el.text }} <span class="default-span active message-span">{{ el.date }}</span></p>

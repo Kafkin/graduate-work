@@ -80,7 +80,7 @@ export default {
   },
 
   inputRoomPassword: [
-    { where: 'password', settings: { title: 'Enter password room', type: 'password', placeholder: 'C9U20...', id: 'roomPass', min: 5, max: 11 } },
+    { where: 'password', settings: { title: 'Enter password room', type: 'password', placeholder: 'C9U20...', id: 'roomPass', min: 0, max: 11 } },
   ],
 
   formCreateAnswer: {
@@ -105,6 +105,19 @@ export default {
   formCreatePost: {
     description: null,
     title: null,
+  },
+
+  inputCreateRoom: [
+    { where: 'title', settings: { title: 'Enter your title', type: 'text', placeholder: 'first room', id: 'roomTitle', min: 3, max: 7 } },
+    { where: 'password', settings: { title: 'Enter your password', type: 'text', placeholder: 'C9U20...', id: 'roomPassword', min: 0, max: 11 } },
+  ],
+
+  showFormCreateRoom: false,
+
+  formCreateRoom: {
+    password: null,
+    title: null,
+    type: 'chat'
   },
 
   inputCreatePost: [

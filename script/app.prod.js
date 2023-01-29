@@ -91,6 +91,39 @@ Vue
         }
       },
 
+      async createRoom() {
+        const res = await helper.post( 'https://serega-test.store/api/rooms/create', {
+          refresh_token: localStorage.getItem( 'refresh_token' ),
+          access_token: localStorage.getItem( 'access_token' ),
+          password: this.formCreateRoom.password,
+          title: this.formCreateRoom.title,
+          type: this.formCreateRoom.type,
+        });
+
+        if( res && res.error ) {
+          this.message( res.error.message, res.error.code )
+          return
+        }
+
+        this.message( { success: [`Вы создали к комнату`] }, 201 )
+        this.showFormCreateRoom = false
+      },
+
+      async deleteRoom() {
+        const res = await helper.post( 'https://serega-test.store/api/rooms/delete', {
+          refresh_token: localStorage.getItem( 'refresh_token' ),
+          access_token: localStorage.getItem( 'access_token' ),
+        });
+
+        if( res && res.error ) {
+          this.message( res.error.message, res.error.code )
+          return
+        }
+
+        this.current.windows = this.current.windows.filter( el => el !== 'messages' )
+        this.message( { success: [`Комната удалена`] }, 201 )
+      },
+
       async message( messages, code ) {
         this.error.messages = await []
         this.error.color = await 'green'
@@ -396,6 +429,10 @@ Vue
         return this.pusher.subscribe(`answer-channel`)
       },
 
+      isActiveCreateRoomBtn() {
+        return this.formCreateRoom.title
+      },
+
       isActiveCreatePostBtn() {
         return this.formCreatePost.title && this.formCreatePost.description
       },
@@ -416,9 +453,9 @@ Vue
         return this.formLog.email && this.formLog.password
       },
       
-      isActiveRoomPasswordBtn() {
-        return this.formRoomPassword.password
-      },
+      // isActiveRoomPasswordBtn() {
+      //   return this.formRoomPassword.password
+      // },
 
       isActiveCreateAnswerBtn() {
         return this.formCreateAnswer.text

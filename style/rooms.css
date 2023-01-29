@@ -1,5 +1,5 @@
 .cmd__rooms{
-  width: 430px;
+  width: 400px;
 }
 
 .cmd-title_rooms{
@@ -23,7 +23,7 @@
 }
 
 .room-search{
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 /* room */
@@ -59,4 +59,69 @@
   border-color: var(--font-color-active);
   /* background: var(--font-color-double); */
   transform: scale( 1.01 );
+}
+
+/* db style */
+.container-create-post_room{
+  gap: 20px !important;
+  margin-bottom: 20px;
+}
+
+.container-tegs__title_room{
+  border: 3px dashed var(--font-color);
+  border-top: 3px dashed var(--font-color);
+  font-size: 22px !important;
+  padding: 0px 9px;
+  width: 100%;
+}
+
+.container-tegs__title_room:hover{
+  background: var(--font-color-double);
+  color: var(--font-color-active);
+  transform: scale( 1.01 );
+}
+
+.form_create_room{
+  gap: 17px !important; 
+}
+
+.form_create_room .form-span{
+  gap: 2px !important; 
+}
+
+.form-span_room_group{
+  display: flex; align-items: center; gap: 20px;
+  width: 100%; height: max-content;
+  padding: 0px 10px;
+}
+
+.form-span_room{
+  width: max-content !important; height: max-content !important;
+  display: flex; flex-direction: row !important;
+  align-items: center;
+}
+
+.form-span_room > .form-label{
+  font-size: 16px;
+  opacity: 80%;
+}
+
+.form-span_room > .form-label:hover{
+  filter: drop-shadow(0 0 5px var(--font-color));
+  opacity: 100%;
+}
+
+.form-span_room > .form-label.active{
+  filter: drop-shadow(0 0 5px var(--font-color-active));
+  color: var(--font-color-active) !important;
+  transform: scale( 1.10 );
+  opacity: 100%;
+}
+
+.form-input_room{
+  width: 15px !important; height: 15px !important;
+  transform: translateY( 25% );
+  position: relative;
+  margin-left: 10px;
+  display: none;
 }
