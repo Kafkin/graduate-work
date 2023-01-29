@@ -25,7 +25,7 @@ Vue
     watch: {
       async messageTextarea( newVal, oldVal ) {
         if( this.current.user.user_name === this.current.room.recording ) {
-          if( this.dropFillMessage ) {
+          if( this.dropFillMessage && this.messageTextarea !== 'empty' ) {
             clearTimeout( this.timeMessage )
             this.dropFillMessage = false
             
@@ -46,7 +46,7 @@ Vue
 
       async messageTextareaDB( newVal, oldVal ) {
         if( this.current.user.user_name === this.current.room.recording ) {
-          if( this.dropFillMessage ) {
+          if( this.dropFillMessage && this.messageTextareaDB !== '.render-container{}' ) {
             clearTimeout( this.timeMessage )
             this.dropFillMessage = false
             
@@ -184,6 +184,12 @@ Vue
             this.message( res_two.error.message, res_two.error.code )
             return
           }
+
+          if( res_two && !res_two.length ) {
+            this.messageTextarea = ''; this.messageTextareaDB = '.render-container{}';
+            return 
+          }
+
           
           let [ html, css ] = await res_two[0].text.split('#css')
           this.messageTextarea = html; this.messageTextareaDB = css.includes('.render-container') ? css : '.render-container{}' + css;
