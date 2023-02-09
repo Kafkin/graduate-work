@@ -113,6 +113,7 @@ Vue
         const res = await helper.post( 'https://serega-test.store/api/rooms/delete', {
           refresh_token: localStorage.getItem( 'refresh_token' ),
           access_token: localStorage.getItem( 'access_token' ),
+          room_id: this.current.room.id
         });
 
         if( res && res.error ) {
@@ -353,13 +354,18 @@ Vue
         this.current.windows = this.current.windows.filter( el => el !== 'update-post' && el !== 'info-post' )
         this.current.activeWindow = 'posts'
         this.current.loaderPost = true
-        this.posts = []
 
         const res = await helper.post( 'https://serega-test.store/api/posts/delete', {
           refresh_token: localStorage.getItem( 'refresh_token' ),
           access_token: localStorage.getItem( 'access_token' ),
           post_id: this.current.post.id
         });
+
+         if( res && res.error ) {
+          this.message( { success: [ res.error.message ] }, res.error.code )
+          this.current.loaderPost = false
+          return
+        }
 
         this.message( { success: [`Пост удален`] }, 201 )
       },

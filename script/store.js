@@ -51,11 +51,11 @@ export default {
     { black_img: 'black-html-file', white_img: 'white-html-file', title: 'posts', status: false },
     { black_img: 'black-folders', white_img: 'white-folders', title: 'profiler', status: false },
     { black_img: 'black-css-file', white_img: 'white-css-file', title: 'settings', status: false },
+    { black_img: 'black-odt-file', white_img: 'white-odt-file', title: 'admin panel', status: false },
     { black_img: 'black-php-file', white_img: 'white-php-file', title: 'rooms', status: false },
     { black_img: 'black-ppt-file', white_img: 'white-ppt-file', title: 'login', status: false },
     { black_img: 'black-xls-file', white_img: 'white-xls-file', title: 'registration', status: false },
     { black_img: 'black-odt-file', white_img: 'white-odt-file', title: 'exit', status: false },
-    { black_img: 'black-odt-file', white_img: 'white-odt-file', title: 'admin panel', status: false },
   ],
 
   filters: [

@@ -23,6 +23,7 @@
   <link rel="stylesheet" href="./style/about.css">
   <link rel="stylesheet" href="./style/form.css">
   <link rel="stylesheet" href="./style/posts.css">
+  <link rel="stylesheet" href="./style/admin.css">
   <link rel="stylesheet" href="./style/login.css">
   <link rel="stylesheet" href="./style/registration.css">
   <link rel="stylesheet" href="./style/update-post.css">
@@ -144,27 +145,29 @@
             <img class="loader-post__img" src="./assets/gif/Untitled 14-Nov-2022-213929.gif" alt="loader">
           </div>
 
-          <div class="post" v-activing v-for="el in filterPosts" :key="el" @click="!isActiveWindow( 'info-post' ) && current.windows.push( 'info-post' ), current.activeWindow = 'info-post', current.post = el, eventAnswer()">
-            <span class="post-info">
-              <p class="post-info__item">likes: {{ el.likes ? el.likes.length : 0 }}</p>
-              <p class="post-info__item">answers: {{ el.answers ? el.answers.length : 0 }}</p>
-              <p class="post-info__item">wiews: {{ el.wiews ? el.wiews.length : 0 }}</p>
-            </span>
-
-            <span class="post-text">
-              <p class="post-text__title">{{ el.title }}</p>
-              <p class="post-text__description">{{ el.description }}</p>
-              <span class="post-text__tegs">
-                <p class="container-tegs__item container-tegs__item_post" v-for="teg in el.tegs">{{ teg }}</p>
+          <span class="container-posts-db" v-else>
+            <div class="post" v-activing v-for="el in filterPosts" :key="el" @click="!isActiveWindow( 'info-post' ) && current.windows.push( 'info-post' ), current.activeWindow = 'info-post', current.post = el, eventAnswer()">
+              <span class="post-info">
+                <p class="post-info__item">likes: {{ el.likes ? el.likes.length : 0 }}</p>
+                <p class="post-info__item">answers: {{ el.answers ? el.answers.length : 0 }}</p>
+                <p class="post-info__item">wiews: {{ el.wiews ? el.wiews.length : 0 }}</p>
               </span>
-            </span>
-            
-            <span class="post-user">
-              <p class="post-user__name">author: {{ el.author.name }}</p>
-              <p class="post-user__border">/</p>
-              <p class="post-user__date">date public: {{ el.date }}</p>
-            </span>
-          </div>
+  
+              <span class="post-text">
+                <p class="post-text__title">{{ el.title }}</p>
+                <p class="post-text__description">{{ el.description }}</p>
+                <span class="post-text__tegs">
+                  <p class="container-tegs__item container-tegs__item_post" v-for="teg in el.tegs">{{ teg }}</p>
+                </span>
+              </span>
+              
+              <span class="post-user">
+                <p class="post-user__name">author: {{ el.author.name }}</p>
+                <p class="post-user__border">/</p>
+                <p class="post-user__date">date public: {{ el.date }}</p>
+              </span>
+            </div>
+          </span>
         </div>
 
       </div>
@@ -266,7 +269,7 @@
           </span>
   
           <span class="info-post__settings" v-if="current.user">
-            <button class="info-post__settings-btn" @click="deletePost(), current.post = null" v-if="current.post.author.id === current.user.user_id">delete</button>
+            <button class="info-post__settings-btn" @click="deletePost(), current.post = null" v-if="current.post.author.id === current.user.user_id || current.user.user_role === 'admin'">delete</button>
             <button class="info-post__settings-btn" @click="!isActiveWindow( 'update-post' ) && current.windows.push( 'update-post' ), current.activeWindow = 'update-post', selectPost()" v-if="current.post.author.id === current.user.user_id">update</button>
             <button class="info-post__settings-btn" @click="!isActiveWindow( 'create-answer' ) && current.windows.push( 'create-answer' ), current.activeWindow = 'create-answer'">create answer</button>
           </span>
@@ -492,7 +495,7 @@
           <button class="form-btn" type="submit">select</button>
         </form>
         
-        <span class="span__container" v-if="!activeRoom && current.room.author.name === current.user.user_name" style="margin: 10px;">
+        <span class="span__container" v-if="!activeRoom && (current.room.author.name === current.user.user_name || current.user.user_role === 'admin')" style="margin: 10px;">
           <button class="form-btn form-btn_parb" @click.prevent="deleteRoom">delete room</button>
         </span>
 
@@ -538,8 +541,74 @@
     </template>
     
     <template v-slot:cmd-body>
-      <div class="cmd-body cmd-body_render render-container" v-html="render()">
-        {{ render() }}
+      <div class="cmd-body cmd-body_render render-container" v-html="render()"></div>
+    </template>
+  </v-cmd>
+
+
+
+  <v-cmd 
+    :settings="{ name: 'admin panel', index: 100 }" 
+    v-model:active="current.activeWindow" 
+    v-if="isActiveWindow( 'admin panel' )" 
+    v-model="current.windows" 
+    class="cmd__admin"
+  >
+    <template v-slot:cmd-header>
+      <div class="cmd-title cmd-title_post">admin panel</div>
+    </template>
+    
+    <template v-slot:cmd-body>
+      <div class="cmd-body cmd-body_admin">
+        
+        <h1 class="title_admin">Управление постами</h1>
+        <div class="container-posts container-posts_admin">
+          <div class="loader-post" v-if="current.loaderPost" v-cloak>
+            <img class="loader-post__img" src="./assets/gif/Untitled 14-Nov-2022-213929.gif" alt="loader">
+          </div>
+
+          <h1 v-if="!posts.length">Постов нет</h1>
+
+          <div class="post post_admin" v-activing v-for="el in filterPosts" :key="el" @click="!isActiveWindow( 'info-post' ) && current.windows.push( 'info-post' ), current.activeWindow = 'info-post', current.post = el, eventAnswer()">
+            <span class="post-info post-info_admin">
+              <p class="post-info__item">likes: {{ el.likes ? el.likes.length : 0 }}</p>
+              <p class="post-info__item">answers: {{ el.answers ? el.answers.length : 0 }}</p>
+              <p class="post-info__item">wiews: {{ el.wiews ? el.wiews.length : 0 }}</p>
+            </span>
+
+            <span class="post-text post-text_admin">
+              <p class="post-text__title">{{ el.title }}</p>
+            </span>
+            
+            <span class="post-user post-user_admin">
+              <p class="post-user__name">author: {{ el.author.name }}</p>
+              <p class="post-user__border">/</p>
+              <p class="post-user__date">date public: {{ el.date }}</p>
+            </span>
+          </div>
+        </div>
+
+        <h1 class="title_admin">Управление комнатами</h1>
+        <div class="container-room container-room_admin">
+          <div class="room room_admin" 
+            v-for="el in filterRooms" :key="el" 
+            :class="{ 'active': current.room && current.room.id === el.id && isActiveWindow( 'messages' ) }" 
+            @click="
+              messages = null,
+              activeRoom = false,
+              current.room = null,
+              messageTextarea = 'empty',
+              formRoomPassword.password = null,
+              messageTextareaDB = '.render-container{}',
+              !isActiveWindow( 'messages' ) && current.windows.push( 'messages' ),
+              current.activeWindow = 'messages',
+              current.room = el"
+          >
+            <p class="room__author">Author: <span class="default-span active">{{ el.author.name }}</span></p>
+            <p class="room__title">Title: {{ el.title }}</p>
+          </div>
+        </div>
+
       </div>
     </template>
   </v-cmd>
