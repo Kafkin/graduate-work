@@ -1,7 +1,7 @@
 .error{
   transform: translateY( calc( var(--top) * -30px ) );
   position: fixed; bottom: 0; right: 0;
-  background: #a5a5a5;
+  background: #a5a5a5ab;
   padding: 7px 13px;
   font-weight: 900;
   cursor: pointer;
