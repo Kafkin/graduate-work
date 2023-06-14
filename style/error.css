@@ -1,8 +1,9 @@
 .error{
   transform: translateY( calc( var(--top) * -30px ) );
   position: fixed; bottom: 0; right: 0;
-  padding: 7px 13px;
   background: #a5a5a5;
+  padding: 7px 13px;
+  font-weight: 900;
   cursor: pointer;
   margin: 10px;
 }
